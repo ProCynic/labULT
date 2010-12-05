@@ -1,0 +1,12 @@
+condTests: nProd=1 nCons=1 nColors=1 nBuf=1 OK
+condTests: nProd=1 nCons=1 nColors=1 nBuf=5 OK
+condTests: nProd=1 nCons=1 nColors=1 nBuf=50 OK
+condTests: nProd=1 nCons=10 nColors=1 nBuf=1 OK
+condTests: nProd=1 nCons=10 nColors=1 nBuf=5 OK
+condTests: nProd=1 nCons=10 nColors=1 nBuf=50 OK
+condTests: nProd=10 nCons=1 nColors=1 nBuf=1 OK
+condTests: nProd=10 nCons=1 nColors=1 nBuf=5 OK
+condTests: nProd=10 nCons=1 nColors=1 nBuf=50 OK
+condTests: nProd=10 nCons=10 nColors=5 nBuf=1 OK
+condTests: nProd=10 nCons=10 nColors=5 nBuf=5 OK
+condTests: nProd=10 nCons=10 nColors=5 nBuf=50 OK
