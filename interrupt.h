@@ -2,6 +2,7 @@
 #define _INTERRUPT_H_
 
 #include <signal.h>
+#include "ULT.h"
 
 
 void interruptsOn(void);

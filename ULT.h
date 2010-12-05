@@ -2,15 +2,17 @@
 #define _ULT_H_
 #include <ucontext.h>
 #include "list.h"
+#include "interrupt.h"
+
 
 typedef int Tid;
 #define ULT_MAX_THREADS 1024
 #define ULT_MIN_STACK 32768
 
 
-
 typedef struct ThrdCtlBlk{
-  /* ... Fill this in ... */
+  Tid tid;
+  ucontext_t* ucp;
 } ThrdCtlBlk;
 
 
@@ -30,16 +32,16 @@ static const Tid ULT_NOMEMORY = -6;
 static const Tid ULT_FAILED = -7;
 
 static inline int ULT_isOKRet(Tid ret){
-  return (ret >= 0 ? 1 : 0);
+  return (ret >= 0  && ret < ULT_MAX_THREADS ? 1 : 0);
 }
 
+
+
+void init();
+struct ThrdCtlBlk* initTCB(Tid tid);
 Tid ULT_CreateThread(void (*fn)(void *), void *parg);
 Tid ULT_Yield(Tid tid);
 Tid ULT_DestroyThread(Tid tid);
-
-
- 
-
 
 /*
  * Hint: yield() puts a thread on the ready queue and then
@@ -65,8 +67,23 @@ int ULT_Suspend(List_Links *lptr);
 void ULT_Enable(List_Links *lptr);
 
 
+typedef struct listElem {
+  struct List_Links links;
+  struct ThrdCtlBlk* tcb;
+} listElem;
+
+void queueAdd(List_Links* queue, ThrdCtlBlk* tcb);
+struct ThrdCtlBlk* queuePop(List_Links* queue);
+Tid queueFront(List_Links* queue);
+struct ThrdCtlBlk* queueGet(List_Links* queue, Tid tid);
+int queueContains(List_Links* queue, Tid tid);
+void Stub(void (*fn)(void *), void *arg);
+void freeZombie();
+
+
+void queuePrint(); //debugging
+void showThreads(); //debugging
+void printZombie(); //debugging
+void printReady(); //debugging
 
 #endif
-
-
-

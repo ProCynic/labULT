@@ -16,23 +16,25 @@ int loud = 1;
 void
 interruptsOn()
 {
+  //printf("Interupts On\n");
   int ret;
   sigset_t sigset;
-
-  setSet(&sigset);
+  
+  setSet(&sigset);  //
   ret = sigprocmask(SIG_UNBLOCK, &sigset, NULL);
   assert(!ret);
 }
 
 
- 
+
 void
 interruptsOff()
 {
+  //printf("Interupts Off\n");
   int ret;
   
   sigset_t sigset;
-
+  
   setSet(&sigset);
   ret = sigprocmask(SIG_BLOCK, &sigset, NULL);
   assert(!ret);
@@ -48,15 +50,15 @@ setSet(sigset_t *setp){
   assert(!ret);
   return;
 }
- 
+
 
 void
 interruptsQuiet()
 {
   loud = 0;
 }
- 
- 
+
+
 /*
  * Should be called when you initialize threads package.
  * Many of the calls won't make sense at first -- study the
@@ -68,7 +70,7 @@ registerHandler()
   struct sigaction action;
   int error;
   static int hasBeenCalled = 0;
-
+  
   assert(!hasBeenCalled); /* should only register once */
   hasBeenCalled = 1;
   
@@ -80,15 +82,15 @@ registerHandler()
   assert(!error);
   action.sa_flags = SA_SIGINFO; /* use sa_sigaction as handler
                                  * instead of sa_handler*/
-
+  
   if(sigaction(SIGNAL_TYPE, &action, NULL)){
     perror("Setting up signal handler");
     assert(0);
   }
- 
+  
   setAlarm();
 }
- 
+
 /*
  * STUB: once registerhandler is called, this routine
  * gets called each time SIGNAL_TYPE is sent to this process
@@ -96,34 +98,34 @@ registerHandler()
 void 
 interruptHandler(int sig, siginfo_t *sip, void *contextVP)
 {
-
+  
   /* Tell compiler not to complain about unused variable
      in this stub version of the fuction */
   /*NOTUSED*/
   ucontext_t *context = (ucontext_t *)contextVP;
-
+  
   /*
    * SIGALRM is masked on entry 
    */
   sigset_t mask;
-  int ret = sigprocmask(0, NULL, &mask);
+  int ret = sigprocmask(0, NULL, &mask);  // mask becomes current signal set
   assert(!ret);
   assert(sigismember(&mask, SIGALRM));
-
+  
   if(loud){
     printf("Made it to handler with interrupted thread's state at %p\n",
            context);
   }
   setAlarm();
-
-
+  
+  
   /* 
    * Your code here 
    */
-
+  ULT_Yield(ULT_ANY);
   return;
 }
- 
+
 
 /*
  * Use the alarm() system call to set an alarm for
@@ -143,20 +145,20 @@ static void
 setAlarm()
 {
   static const int SECONDS_TO_NEXT = 1;
-
+  
   alarm(SECONDS_TO_NEXT);
   
 }
 
 
-int
-alarmIsEnabled()
+//are interupts on?
+int alarmIsEnabled()
 {
   sigset_t mask;
   int ret;
-
-  ret = sigprocmask(0, NULL, &mask);
+  
+  ret = sigprocmask(0, NULL, &mask);  //mask becomes current sigset
   assert(!ret);
-  return(sigismember(&mask, SIGALRM) ? 0 : 1);
+  return(sigismember(&mask, SIGALRM) ? 0 : 1);  //if sigalarm is being blocked, return 0, else return 1
 }
 

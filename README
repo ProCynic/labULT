@@ -1,20 +1,23 @@
 Name and UTEID of both team members
-
+  Geoffrey Parker - grp352
+  Alex Chan       - ayc87
 
 Number of slip days used (this project)/(total)
-
+  0/0
 
 Describe your high level design here.
-
+  High level design is as stated in the spec.
+  We did create some helper methods for reading and writing queues/lists.
 
 Describe your testing strategy here
 (and explain how to run your tests and interpret your results)
 
+  Tested for any edge cases we could think of that weren't in basicThreadTests
+  Did a couple of tests that did repeated normal operation.
+
+  $ make clean && make && gcc -o advancedTests advancedTests.c ULT.c list.c interrupt.c && ./advancedTests
+  see if any assertions fail
 
 
 Document your testing results here
-
-
-
-
-
+  All tests passed.
